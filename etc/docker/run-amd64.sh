@@ -66,9 +66,18 @@ done
 RUN_DIR_HOST="/tmp"
 RUN_DIR_DOCKER="/tmp"
 
-docker run --platform linux/amd64 -it "${runargs[@]}" --rm --mount "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind" \
+docker run --platform linux/amd64 --rm -it "${runargs[@]}" \
+    --mount "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind" \
+    -e NAT64=0 \
     --sysctl "net.ipv6.conf.all.disable_ipv6=0 net.ipv4.conf.all.forwarding=1 net.ipv6.conf.all.forwarding=1" \
-    -w "$RUN_DIR_DOCKER" -v "$RUN_DIR_HOST:$RUN_DIR_DOCKER"  \
+    -w "$RUN_DIR_DOCKER" \
+    -v "$RUN_DIR_HOST:$RUN_DIR_DOCKER" \
     --privileged "$IMAGE" "$@"
 
-#    -v /dev/pts/3:/dev/ttyUSB0 \
+# before image name
+# --mount type=bind,source=/dev/gp,target=/dev/gp \
+# -v /dev/pts/3:/dev/ttyUSB0 \
+
+# after image name
+# --backbone-interface wlan0 \
+# --radio-url spinel+hdlc+forkpty:///home/pi//OpenThread/qpg7015m-ot-rcp.elf
