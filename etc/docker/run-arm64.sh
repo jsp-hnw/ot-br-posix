@@ -67,7 +67,7 @@ RUN_DIR_HOST="/tmp"
 RUN_DIR_DOCKER="/tmp"
 
 sudo modprobe ip6table_filter
-docker run --platform linux/arm64 --rm -it "${runargs[@]}" \
+docker run --platform linux/arm64 --rm -it --name "$IMAGE" "${runargs[@]}" \
     --mount "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind" \
     -e NAT64=0 -p 8080:80 \
     --sysctl "net.ipv6.conf.all.disable_ipv6=0 net.ipv4.conf.all.forwarding=1 net.ipv6.conf.all.forwarding=1" \
